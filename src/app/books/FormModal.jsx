@@ -1,10 +1,21 @@
-import { useState } from "react";
+import { GET_AUTHOR_NAMES } from "@/graphql/client/author";
+import { useQuery } from "@apollo/client";
+import { useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
-const initialFormData = { name: "", born_date: "", biography: "" };
+const initialFormData = { title: "", published_date: "", description: "" };
 
 export default function FormModal({ show, onClose, onSubmit, initialData }) {
   const [form, setForm] = useState(initialData ? initialData : initialFormData);
+  const authorRef = useRef(null);
+
+  const { loading, data, error } = useQuery(GET_AUTHOR_NAMES);
+
+  if (loading) return <h1>Loading...</h1>;
+  if (error) {
+    console.log(error);
+    return <h1>Error</h1>;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -13,7 +24,7 @@ export default function FormModal({ show, onClose, onSubmit, initialData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(form);
+    onSubmit({ ...form, author_id: authorRef.current.value });
     setForm(initialFormData);
   };
 
@@ -22,41 +33,58 @@ export default function FormModal({ show, onClose, onSubmit, initialData }) {
       <Modal.Header closeButton>
         <Modal.Title>{`${
           initialData ? "Update" : "Add new"
-        } Author`}</Modal.Title>
+        } Book`}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">Name</label>
+            <label className="form-label">Title</label>
             <input
               className="form-control"
-              name="name"
+              name="title"
               onChange={handleChange}
-              value={form.name}
+              value={form.title}
               required
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Born Date</label>
+            <label className="form-label">Published Date</label>
             <input
               type="date"
               className="form-control"
-              name="born_date"
+              name="published_date"
               onChange={handleChange}
-              value={form.born_date}
+              value={form.published_date}
               required
             />
           </div>
           <div className="mb-3">
-            <label className="form-label">Biography</label>
+            <label className="form-label">Description</label>
             <textarea
               className="form-control"
-              name="biography"
+              name="description"
               rows="3"
               onChange={handleChange}
-              value={form.biography}
+              value={form.description}
               required
             />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Author</label>
+            <select
+              name="authorName"
+              id="authorName"
+              ref={authorRef}
+              defaultValue={
+                initialData ? initialData.author.id : data.authorNames[0].id
+              }
+            >
+              {data.authorNames.map((author, idx) => (
+                <option key={author.id} value={author.id}>
+                  {author.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="text-end">
             <Button variant="secondary" onClick={onClose} className="me-2">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Container, Row, Col, Pagination } from "react-bootstrap";
 import { useMutation, useQuery } from "@apollo/client";
 
@@ -13,8 +13,8 @@ import {
 import Card from "@/app/authors/Card";
 import BioModal from "./BioModal";
 import FormModal from "./FormModal";
-import SuccessToast from "./SuccessToast";
-import ConfirmModal from "./ConfirmModal";
+import SuccessToast from "@/components/SuccessToast";
+import ConfirmModal from "@/components/ConfirmModal";
 
 const LIMIT = 9;
 
@@ -132,6 +132,7 @@ export default function Authors() {
       });
       setShowFormModal(false);
       setShowToast("Updated the Author successfully !");
+      setSelectedAuthor(null);
 
       refetch({
         offset: 0,

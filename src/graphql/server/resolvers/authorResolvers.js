@@ -5,12 +5,14 @@ import {
   getAuthoredBooks,
   getAuthors,
   updateAuthor,
+  getAuthorNames,
 } from "@/db/author";
 
 export default {
   Query: {
     authors: async (_, args) => await getAuthors(args),
     author: async (_, args) => await getAuthorById(args.id),
+    authorNames: async () => await getAuthorNames(),
   },
 
   Author: {

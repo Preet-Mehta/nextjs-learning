@@ -21,14 +21,19 @@ export default `#graphql
         author: Author!
     }
 
+    type PaginatedBooks {
+        books: [Book!]!
+        totalCount: Int!
+    }
+
     type Query {
-        books: [Book]
+        books (offset: Int, limit: Int, title: String, published_date: String): PaginatedBooks!
         book (id: ID!): Book
     }
 
     type Mutation {
         addBook (book: AddBookInputs!): Book
         deleteBook (id: ID!): Book
-        updateBook (id: ID!, book: EditBookInputs!): Book
+        updateBook (id: ID!, book: EditBookInputs!): [Int!]!
     }
 `;

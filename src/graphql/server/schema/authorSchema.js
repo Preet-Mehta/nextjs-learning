@@ -24,9 +24,15 @@ export default `#graphql
         totalCount: Int!
     }
 
+    type AuthorNames {
+        id: ID!
+        name: String!
+    }
+
     type Query {
         authors(offset: Int, limit: Int, name: String, born_date: String): PaginatedAuthors!
         author (id: ID!): Author
+        authorNames: [AuthorNames!]!
     }
 
     type Mutation {

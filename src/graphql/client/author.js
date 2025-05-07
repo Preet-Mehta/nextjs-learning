@@ -24,6 +24,15 @@ export const GET_AUTHORS = gql`
   }
 `;
 
+export const GET_AUTHOR_NAMES = gql`
+  query AuthorNames {
+    authorNames {
+      id
+      name
+    }
+  }
+`;
+
 export const CREATE_AUTHOR = gql`
   mutation AddAuthor($author: AddAuthorInputs!) {
     addAuthor(author: $author) {
