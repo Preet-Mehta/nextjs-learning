@@ -1,5 +1,10 @@
+import "bootstrap/dist/css/bootstrap.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
+import BootstrapClient from "@/components/BootstrapClient.js";
+import NavbarComponent from "@/components/Navbar";
+import ApolloClientProvider from "./ApolloClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,7 +25,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <NavbarComponent />
+        <ApolloClientProvider>{children}</ApolloClientProvider>
+        {/* <BootstrapClient /> */}
       </body>
     </html>
   );

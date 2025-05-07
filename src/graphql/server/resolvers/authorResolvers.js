@@ -1,0 +1,25 @@
+import {
+  createAuthor,
+  deleteAuthor,
+  getAuthorById,
+  getAuthoredBooks,
+  getAuthors,
+  updateAuthor,
+} from "@/db/author";
+
+export default {
+  Query: {
+    authors: async () => await getAuthors(),
+    author: async (_, args) => await getAuthorById(args.id),
+  },
+
+  Author: {
+    books: async (parent) => await getAuthoredBooks(parent.id),
+  },
+
+  Mutation: {
+    addAuthor: async (_, args) => await createAuthor(args.author),
+    deleteAuthor: async (_, args) => await deleteAuthor(args.id),
+    updateAuthor: async (_, args) => await updateAuthor(args.id, args.author),
+  },
+};

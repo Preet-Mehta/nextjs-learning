@@ -9,13 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
+    "@apollo/server": "^4.12.0",
+    "@as-integrations/next": "^3.2.0",
+    "@graphql-tools/merge": "^9.0.24",
+    "bootstrap": "^5.3.6",
+    "graphql": "^16.11.0",
+    "next": "15.3.1",
+    "pg": "^8.15.6",
+    "pg-hstore": "^2.3.4",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
-    "next": "15.3.1"
+    "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3",
     "eslint": "^9",
-    "eslint-config-next": "15.3.1",
-    "@eslint/eslintrc": "^3"
+    "eslint-config-next": "15.3.1"
   }
 }
