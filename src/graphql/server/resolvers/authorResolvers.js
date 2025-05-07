@@ -9,7 +9,7 @@ import {
 
 export default {
   Query: {
-    authors: async () => await getAuthors(),
+    authors: async (_, args) => await getAuthors(args),
     author: async (_, args) => await getAuthorById(args.id),
   },
 

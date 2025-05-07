@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { useEffect, useRef, useState } from "react";
+import { Button, Container, Row, Col, Pagination } from "react-bootstrap";
 import { useMutation, useQuery } from "@apollo/client";
 
 import {
@@ -16,23 +16,62 @@ import FormModal from "./FormModal";
 import SuccessToast from "./SuccessToast";
 import ConfirmModal from "./ConfirmModal";
 
+const LIMIT = 9;
+
 export default function Authors() {
   // Modals
   const [showBioModal, setShowBioModal] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // Selected author data
-  const [selectedAuthor, setSelectedAuthor] = useState(null);
-
   // Toast
   const [showToast, setShowToast] = useState(false);
 
+  // Dynamic content data
+  const [selectedAuthor, setSelectedAuthor] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const nameRef = useRef(null);
+  const bornDateRef = useRef(null);
+
   // GraphQL queries and mutations
-  const { loading, error, data, refetch } = useQuery(GET_AUTHORS);
+  const { loading, error, data, refetch } = useQuery(GET_AUTHORS, {
+    variables: { offset: (currentPage - 1) * LIMIT, limit: LIMIT },
+  });
+
   const [createAuthor] = useMutation(CREATE_AUTHOR);
   const [deleteAuthor] = useMutation(DELETE_AUTHOR);
   const [updateAuthor] = useMutation(UPDATE_AUTHOR);
+
+  if (loading) return <h1>Loading...</h1>;
+  if (error) {
+    console.log(error);
+    return <h1>Error</h1>;
+  }
+
+  // Filter handlers
+  const applyFilters = () => {
+    setCurrentPage(1);
+
+    refetch({
+      offset: 0,
+      limit: LIMIT,
+      name: nameRef.current.value,
+      born_date: bornDateRef.current.value,
+    });
+  };
+
+  const resetFilters = () => {
+    setCurrentPage(1);
+
+    nameRef.current.value = "";
+    bornDateRef.current.value = "";
+    refetch({
+      offset: 0,
+      limit: LIMIT,
+      name: nameRef.current.value,
+      born_date: bornDateRef.current.value,
+    });
+  };
 
   // Show Modal handlers
   const handleShowBio = (author) => {
@@ -70,7 +109,12 @@ export default function Authors() {
       setShowFormModal(false);
       setShowToast("Added a new Author !");
 
-      refetch();
+      refetch({
+        offset: 0,
+        limit: LIMIT,
+        name: nameRef.current.value,
+        born_date: bornDateRef.current.value,
+      });
     } catch (error) {
       console.log("Error occurred while creating new author:", error);
     }
@@ -89,7 +133,12 @@ export default function Authors() {
       setShowFormModal(false);
       setShowToast("Updated the Author successfully !");
 
-      refetch();
+      refetch({
+        offset: 0,
+        limit: LIMIT,
+        name: nameRef.current.value,
+        born_date: bornDateRef.current.value,
+      });
     } catch (error) {
       console.log("Error occurred while updating the author:", error);
     }
@@ -101,30 +150,61 @@ export default function Authors() {
       handleCloseDelete();
       setShowToast("Author deleted successfully !");
 
-      refetch();
+      refetch({
+        offset: 0,
+        limit: LIMIT,
+        name: nameRef.current.value,
+        born_date: bornDateRef.current.value,
+      });
     } catch (error) {
       console.log("Error occurred while deleting the author:", error);
     }
   };
 
-  if (loading) return <h1>Loading...</h1>;
-  if (error) return <h1>Error: {error}</h1>;
+  // Pagination-related calculations
+  const totalAuthorsCount = data.authors.totalCount;
+  const totalPages = Math.ceil(totalAuthorsCount / LIMIT);
 
   return (
     <>
       <SuccessToast show={showToast} onClose={() => setShowToast(false)} />
-
       <Container className="my-3">
         <h2 className="text-center mb-4">Know the Authors</h2>
 
-        <div className="d-flex justify-content-end mb-3">
-          <Button variant="success" onClick={handleShowForm}>
-            + New Author
-          </Button>
+        <div className="row g-2 mb-3 align-items-end">
+          <div className="col-md-3">
+            <input
+              className="form-control"
+              placeholder="Search by name"
+              name="name"
+              ref={nameRef}
+            />
+          </div>
+          <div className="col-md-3">
+            <input
+              type="date"
+              className="form-control"
+              name="born_date"
+              ref={bornDateRef}
+            />
+          </div>
+          <div className="col-md-3">
+            <Button variant="primary" onClick={applyFilters}>
+              Apply Filters
+            </Button>
+            <Button className="mx-1" variant="secondary" onClick={resetFilters}>
+              Reset
+            </Button>
+          </div>
+          <div className="col-md-3 text-end">
+            <Button variant="success" onClick={handleShowForm}>
+              + New Author
+            </Button>
+          </div>
         </div>
 
         <Row>
-          {data.authors.map((author, index) => (
+          {data.authors.authors.map((author, index) => (
             <Col key={index} md={4} className="mb-4">
               <Card
                 author={author}
@@ -162,6 +242,28 @@ export default function Authors() {
           />
         )}
       </Container>
+
+      {totalPages > 1 && (
+        <Pagination className="justify-content-center mt-4">
+          <Pagination.First
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage(1)}
+          />
+          <Pagination.Prev
+            disabled={currentPage === 1}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          />
+          <Pagination.Item active>{currentPage}</Pagination.Item>
+          <Pagination.Next
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          />
+          <Pagination.Last
+            disabled={currentPage === totalPages}
+            onClick={() => setCurrentPage(totalPages)}
+          />
+        </Pagination>
+      )}
     </>
   );
 }

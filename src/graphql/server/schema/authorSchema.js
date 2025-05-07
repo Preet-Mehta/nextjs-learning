@@ -19,8 +19,13 @@ export default `#graphql
         books: [Book!]
     }
 
+    type PaginatedAuthors {
+        authors: [Author!]!
+        totalCount: Int!
+    }
+
     type Query {
-        authors: [Author]
+        authors(offset: Int, limit: Int, name: String, born_date: String): PaginatedAuthors!
         author (id: ID!): Author
     }
 
