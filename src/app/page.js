@@ -6,6 +6,8 @@ import styles from "./page.module.css";
 import { Container, Row, Col, ListGroup, ListGroupItem } from "react-bootstrap";
 
 export default function Home() {
+  console.log(process.env);
+
   return (
     <>
       <section className={styles.hero}>
