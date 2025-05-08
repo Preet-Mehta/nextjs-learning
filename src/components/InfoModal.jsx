@@ -1,13 +1,13 @@
 import { Modal, Button } from "react-bootstrap";
 
-export default function BioModal({ show, onClose, author }) {
+export default function InfoModal({ show, onClose, title, content }) {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{author?.name}</Modal.Title>
+        <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{author?.biography}</p>
+        <p>{content}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>

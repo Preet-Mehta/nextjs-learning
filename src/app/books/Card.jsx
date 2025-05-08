@@ -12,8 +12,9 @@ export default function BookCard({
       <Card.Body>
         <div>
           <Card.Title>{book.title}</Card.Title>
-          <Card.Subtitle className="mb-2 text-muted">
-            Published: {book.published_date}
+          <Card.Subtitle className="mb-2 text-muted d-flex flex-column">
+            <div>Published: {book.published_date}</div>
+            <div>Author: {book.author.name}</div>
           </Card.Subtitle>
         </div>
         <div className="d-flex justify-content-between align-items-center">

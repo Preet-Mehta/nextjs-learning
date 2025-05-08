@@ -11,12 +11,11 @@ import {
   UPDATE_BOOK,
 } from "@/graphql/client/book";
 import Card from "./Card";
-import DescriptionModal from "./DescriptionModal";
 import FormModal from "./FormModal";
 import SuccessToast from "@/components/SuccessToast";
 import ConfirmModal from "@/components/ConfirmModal";
-
-const LIMIT = 9;
+import InfoModal from "@/components/InfoModal";
+import { LIMIT } from "@/constants";
 
 export default function Books() {
   // Modals
@@ -121,13 +120,13 @@ export default function Books() {
   };
 
   const handleBookUpdate = async (updatedBook) => {
-    const { title, description, published_date } = updatedBook;
+    const { title, description, published_date, author_id } = updatedBook;
 
     try {
       await updateBook({
         variables: {
           updateBookId: selectedBook.id,
-          book: { title, description, published_date },
+          book: { title, description, published_date, author_id },
         },
       });
       setShowFormModal(false);
@@ -218,10 +217,11 @@ export default function Books() {
         </Row>
 
         {showDescriptionModal && (
-          <DescriptionModal
+          <InfoModal
             show={showDescriptionModal}
             onClose={handleCloseDescription}
-            book={selectedBook}
+            title={selectedBook.title}
+            content={selectedBook.description}
           />
         )}
 
