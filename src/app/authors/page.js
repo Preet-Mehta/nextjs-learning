@@ -240,6 +240,7 @@ export default function Authors() {
             onClose={handleCloseDelete}
             onConfirm={handleAuthorDelete}
             message={"Are you sure you want to delete the author ?"}
+            books={selectedAuthor.books}
           />
         )}
       </Container>

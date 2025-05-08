@@ -1,4 +1,5 @@
 import { Book } from "@/models/book";
+import Rating from "@/models/rating";
 import { Op } from "sequelize";
 
 export async function getBooks({
@@ -42,6 +43,7 @@ export async function createBook(bookParams) {
 export async function deleteBook(id) {
   try {
     await Book.destroy({ where: { id } });
+    await Rating.deleteMany({ book_id: Number(id) });
   } catch (error) {
     console.log(`Failed to delete Book: ${error}`);
   }

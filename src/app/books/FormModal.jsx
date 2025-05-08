@@ -76,7 +76,11 @@ export default function FormModal({ show, onClose, onSubmit, initialData }) {
               id="authorName"
               ref={authorRef}
               defaultValue={
-                initialData ? initialData.author.id : data.authorNames[0].id
+                initialData
+                  ? initialData.author.id
+                  : data.authorNames.length > 0
+                  ? data.authorNames[0].id
+                  : ""
               }
             >
               {data.authorNames.map((author, idx) => (
@@ -90,7 +94,11 @@ export default function FormModal({ show, onClose, onSubmit, initialData }) {
             <Button variant="secondary" onClick={onClose} className="me-2">
               Cancel
             </Button>
-            <Button type="submit" variant="primary">
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={!data.authorNames.length}
+            >
               {initialData ? "Update" : "Add"}
             </Button>
           </div>

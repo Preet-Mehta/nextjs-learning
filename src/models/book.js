@@ -14,4 +14,13 @@ export const Book = sequelize.define("Book", {
     type: DataTypes.DATEONLY,
     allowNull: false,
   },
+  author_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "Authors",
+      key: "id",
+    },
+    onDelete: "CASCADE",
+  },
 });
