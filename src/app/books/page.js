@@ -167,7 +167,7 @@ export default function Books() {
 
   return (
     <>
-      <SuccessToast show={showToast} onClose={() => setShowToast(false)} />
+      <SuccessToast message={showToast} onClose={() => setShowToast(false)} />
       <Container className="my-3">
         <h2 className="text-center mb-4">Explore Books</h2>
 
@@ -211,6 +211,7 @@ export default function Books() {
                 handleShowDescription={handleShowDescription}
                 onDelete={() => handleShowDelete(book)}
                 onEdit={() => handleShowEditForm(book)}
+                setShowToast={setShowToast}
               />
             </Col>
           ))}

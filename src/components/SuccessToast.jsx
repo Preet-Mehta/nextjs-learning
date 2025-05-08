@@ -1,6 +1,8 @@
 import { Toast, ToastContainer } from "react-bootstrap";
 
 export default function SuccessToast({ message, onClose }) {
+  if (!message) return <></>;
+
   return (
     <ToastContainer position="top-end" className="my-5 mx-2">
       <Toast
@@ -10,7 +12,7 @@ export default function SuccessToast({ message, onClose }) {
         delay={3000}
         autohide
       >
-        <Toast.Body className="text-white">{message}</Toast.Body>
+        {<Toast.Body className="text-white">{message}</Toast.Body>}
       </Toast>
     </ToastContainer>
   );

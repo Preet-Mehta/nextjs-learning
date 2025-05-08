@@ -167,7 +167,7 @@ export default function Authors() {
 
   return (
     <>
-      <SuccessToast show={showToast} onClose={() => setShowToast(false)} />
+      {<SuccessToast message={showToast} onClose={() => setShowToast(false)} />}
       <Container className="my-3">
         <h2 className="text-center mb-4">Know the Authors</h2>
 
