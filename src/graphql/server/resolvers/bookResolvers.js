@@ -7,7 +7,7 @@ import {
   updateBook,
 } from "@/db/book";
 
-export default {
+const bookResolvers = {
   Query: {
     books: async (_, args) => await getBooks(args),
     book: async (_, args) => getBookById(args.id),
@@ -23,3 +23,5 @@ export default {
     updateBook: async (_, args) => await updateBook(args.id, args.book),
   },
 };
+
+export default bookResolvers;

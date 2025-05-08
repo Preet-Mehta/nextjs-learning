@@ -1,4 +1,4 @@
-export default `#graphql
+const authorSchema = `#graphql
     input AddAuthorInputs {
         name: String!
         biography: String!
@@ -41,3 +41,5 @@ export default `#graphql
         updateAuthor (id: ID!, author: EditAuthorInputs!): [Int!]!
     }
 `;
+
+export default authorSchema;

@@ -1,4 +1,4 @@
-export default `#graphql
+const bookSchema = `#graphql
     type AddRatingOutput {
         rating: Float!
         book_id: ID!
@@ -22,3 +22,5 @@ export default `#graphql
         addRating (rating: AddRatingInputs!): AddRatingOutput
     }
 `;
+
+export default bookSchema;

@@ -1,4 +1,4 @@
-export default `#graphql
+const bookSchema = `#graphql
     input AddBookInputs {
         title: String!
         description: String!
@@ -37,3 +37,5 @@ export default `#graphql
         updateBook (id: ID!, book: EditBookInputs!): [Int!]!
     }
 `;
+
+export default bookSchema;

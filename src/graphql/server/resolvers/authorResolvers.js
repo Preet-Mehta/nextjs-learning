@@ -8,7 +8,7 @@ import {
   getAuthorNames,
 } from "@/db/author";
 
-export default {
+const authorResolvers = {
   Query: {
     authors: async (_, args) => await getAuthors(args),
     author: async (_, args) => await getAuthorById(args.id),
@@ -25,3 +25,5 @@ export default {
     updateAuthor: async (_, args) => await updateAuthor(args.id, args.author),
   },
 };
+
+export default authorResolvers;
