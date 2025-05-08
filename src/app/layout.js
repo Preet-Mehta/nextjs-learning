@@ -24,7 +24,12 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <NavbarComponent />
-        <ApolloClientProvider>{children}</ApolloClientProvider>
+        <ApolloClientProvider
+          nodeEnv={process.env.NODE_ENV}
+          url={process.env.VERCEL_URL}
+        >
+          {children}
+        </ApolloClientProvider>
       </body>
     </html>
   );

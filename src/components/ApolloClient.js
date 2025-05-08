@@ -2,11 +2,14 @@
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
-const client = new ApolloClient({
-  uri: `https://${process.env.VERCEL_URL}/api/graphql`,
-  cache: new InMemoryCache(),
-});
+export default function ApolloClientProvider({ children, url, nodeEnv }) {
+  const backendUri =
+    nodeEnv === "development" ? "http://localhost:3000" : `https://${url}`;
 
-export default function ApolloClientProvider({ children }) {
+  const client = new ApolloClient({
+    uri: `${backendUri}/api/graphql`,
+    cache: new InMemoryCache(),
+  });
+
   return <ApolloProvider client={client}>{children}</ApolloProvider>;
 }
