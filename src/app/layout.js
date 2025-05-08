@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
         <NavbarComponent />
         <ApolloClientProvider
           nodeEnv={process.env.NODE_ENV}
-          url={process.env.VERCEL_URL}
+          url={process.env.VERCEL_PROJECT_PRODUCTION_URL}
         >
           {children}
         </ApolloClientProvider>
