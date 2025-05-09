@@ -6,6 +6,7 @@ import {
   getBooks,
   updateBook,
 } from "@/db/book";
+import { getRatingsForBook } from "@/db/rating";
 
 const bookResolvers = {
   Query: {
@@ -15,6 +16,7 @@ const bookResolvers = {
 
   Book: {
     author: async (parent) => await getBookAuthor(parent.id),
+    rating: async (parent) => await getRatingsForBook(parent.id),
   },
 
   Mutation: {

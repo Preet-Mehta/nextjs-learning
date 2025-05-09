@@ -19,6 +19,7 @@ const bookSchema = `#graphql
         description: String!
         published_date: String!
         author: Author!
+        rating: Rating!
     }
 
     type PaginatedBooks {

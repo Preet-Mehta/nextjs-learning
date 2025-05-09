@@ -4,31 +4,22 @@ import { useRef, useState } from "react";
 import { Button, Container, Row, Col, Pagination } from "react-bootstrap";
 import { useMutation, useQuery } from "@apollo/client";
 
-import {
-  GET_BOOKS,
-  CREATE_BOOK,
-  DELETE_BOOK,
-  UPDATE_BOOK,
-} from "@/graphql/client/book";
+import { GET_BOOKS, CREATE_BOOK } from "@/graphql/client/book";
 import Card from "./Card";
 import FormModal from "./FormModal";
 import SuccessToast from "@/components/SuccessToast";
-import ConfirmModal from "@/components/ConfirmModal";
-import InfoModal from "@/components/InfoModal";
 import { LIMIT } from "@/constants";
 
 export default function Books() {
   // Modals
-  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [showFormModal, setShowFormModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Toast
   const [showToast, setShowToast] = useState(false);
 
   // Dynamic content data
-  const [selectedBook, setSelectedBook] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+
   const titleRef = useRef(null);
   const publishedDateRef = useRef(null);
 
@@ -38,8 +29,6 @@ export default function Books() {
   });
 
   const [createBook] = useMutation(CREATE_BOOK);
-  const [deleteBook] = useMutation(DELETE_BOOK);
-  const [updateBook] = useMutation(UPDATE_BOOK);
 
   if (loading) return <h1>Loading...</h1>;
   if (error) {
@@ -72,34 +61,9 @@ export default function Books() {
     });
   };
 
-  // Show Modal handlers
-  const handleShowDescription = (book) => {
-    setShowDescriptionModal(true);
-    setSelectedBook(book);
-  };
+  // Modal handlers
   const handleShowForm = () => setShowFormModal(true);
-  const handleShowEditForm = (book) => {
-    setSelectedBook(book);
-    handleShowForm();
-  };
-  const handleShowDelete = (book) => {
-    setShowDeleteModal(true);
-    setSelectedBook(book);
-  };
-
-  // Close Modal handlers
-  const handleCloseDescription = () => {
-    setShowDescriptionModal(false);
-    setSelectedBook(null);
-  };
-  const handleCloseForm = () => {
-    setSelectedBook(null);
-    setShowFormModal(false);
-  };
-  const handleCloseDelete = () => {
-    setShowDeleteModal(false);
-    setSelectedBook(null);
-  };
+  const handleCloseForm = () => setShowFormModal(false);
 
   // Submit handlers
   const handleBookCreate = async (newBook) => {
@@ -116,48 +80,6 @@ export default function Books() {
       });
     } catch (error) {
       console.log("Error occurred while creating new book:", error);
-    }
-  };
-
-  const handleBookUpdate = async (updatedBook) => {
-    const { title, description, published_date, author_id } = updatedBook;
-
-    try {
-      await updateBook({
-        variables: {
-          updateBookId: selectedBook.id,
-          book: { title, description, published_date, author_id },
-        },
-      });
-      setShowFormModal(false);
-      setShowToast("Updated the Book successfully !");
-      setSelectedBook(null);
-
-      refetch({
-        offset: 0,
-        limit: LIMIT,
-        title: titleRef.current.value,
-        published_date: publishedDateRef.current.value,
-      });
-    } catch (error) {
-      console.log("Error occurred while updating the book:", error);
-    }
-  };
-
-  const handleBookDelete = async () => {
-    try {
-      await deleteBook({ variables: { deleteBookId: selectedBook.id } });
-      handleCloseDelete();
-      setShowToast("Book deleted successfully !");
-
-      refetch({
-        offset: 0,
-        limit: LIMIT,
-        title: titleRef.current.value,
-        published_date: publishedDateRef.current.value,
-      });
-    } catch (error) {
-      console.log("Error occurred while deleting the book:", error);
     }
   };
 
@@ -206,41 +128,16 @@ export default function Books() {
         <Row>
           {data.books.books.map((book, index) => (
             <Col key={index} md={4} className="mb-4">
-              <Card
-                book={book}
-                handleShowDescription={handleShowDescription}
-                onDelete={() => handleShowDelete(book)}
-                onEdit={() => handleShowEditForm(book)}
-                setShowToast={setShowToast}
-              />
+              <Card book={book} />
             </Col>
           ))}
         </Row>
 
-        {showDescriptionModal && (
-          <InfoModal
-            show={showDescriptionModal}
-            onClose={handleCloseDescription}
-            title={selectedBook.title}
-            content={selectedBook.description}
-          />
-        )}
-
         {showFormModal && (
           <FormModal
             show={showFormModal}
-            initialData={selectedBook}
             onClose={handleCloseForm}
-            onSubmit={selectedBook ? handleBookUpdate : handleBookCreate}
-          />
-        )}
-
-        {showDeleteModal && (
-          <ConfirmModal
-            show={showDeleteModal}
-            onClose={handleCloseDelete}
-            onConfirm={handleBookDelete}
-            message={"Are you sure you want to delete the book ?"}
+            onSubmit={handleBookCreate}
           />
         )}
       </Container>
