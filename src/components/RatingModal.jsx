@@ -18,7 +18,11 @@ export default function RatingModal({ show, onClose, name, addNewRating }) {
         <Rating onClick={handleRating} allowFraction={true} size={20} />
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" onClick={() => addNewRating(rating)}>
+        <Button
+          variant="primary"
+          onClick={() => addNewRating(rating)}
+          disabled={rating === 0}
+        >
           Add Rating
         </Button>
       </Modal.Footer>

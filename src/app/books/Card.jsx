@@ -100,12 +100,14 @@ export default function BookCard({
         </Card.Body>
       </Card>
 
-      <RatingModal
-        show={showRatingModal}
-        onClose={closeRatingModal}
-        name={book.title}
-        addNewRating={addNewRating}
-      />
+      {showRatingModal && (
+        <RatingModal
+          show={showRatingModal}
+          onClose={closeRatingModal}
+          name={book.title}
+          addNewRating={addNewRating}
+        />
+      )}
     </>
   );
 }
