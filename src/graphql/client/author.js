@@ -17,12 +17,7 @@ export const GET_AUTHORS = gql`
       authors {
         id
         name
-        biography
         born_date
-        books {
-          id
-          title
-        }
       }
     }
   }
@@ -56,5 +51,20 @@ export const DELETE_AUTHOR = gql`
 export const UPDATE_AUTHOR = gql`
   mutation UpdateAuthor($updateAuthorId: ID!, $author: EditAuthorInputs!) {
     updateAuthor(id: $updateAuthorId, author: $author)
+  }
+`;
+
+export const GET_SINGLE_AUTHOR = gql`
+  query GetAuthor($author_id: ID!) {
+    author(id: $author_id) {
+      id
+      name
+      biography
+      born_date
+      books {
+        id
+        title
+      }
+    }
   }
 `;

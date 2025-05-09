@@ -1,12 +1,9 @@
+import { useRouter } from "next/navigation";
 import { Card, Button } from "react-bootstrap";
-import { PencilSquare, Trash } from "react-bootstrap-icons";
 
-export default function AuthorCard({
-  author,
-  handleShowBio,
-  onEdit,
-  onDelete,
-}) {
+export default function AuthorCard({ author }) {
+  const router = useRouter();
+
   return (
     <Card>
       <Card.Body>
@@ -17,24 +14,12 @@ export default function AuthorCard({
           </Card.Subtitle>
         </div>
         <div className="d-flex justify-content-between align-items-center">
-          <Button variant="primary" onClick={() => handleShowBio(author)}>
-            View Bio
+          <Button
+            variant="primary"
+            onClick={() => router.push(`/authors/${author.id}`)}
+          >
+            View Details
           </Button>
-          <div className="d-flex gap-3">
-            <PencilSquare
-              role="button"
-              onClick={() => onEdit(author)}
-              style={{ cursor: "pointer" }}
-              title="Edit"
-            />
-            <Trash
-              role="button"
-              onClick={() => onDelete(author)}
-              style={{ cursor: "pointer" }}
-              title="Delete"
-              color="red"
-            />
-          </div>
         </div>
       </Card.Body>
     </Card>

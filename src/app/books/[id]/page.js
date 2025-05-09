@@ -105,10 +105,10 @@ export default function BookPage({ params }) {
         </Button>
         <h2>{data.book.title}</h2>
         <div className="d-flex gap-3 mb-3">
-          <Button variant="warning" onClick={() => handleShowEdit(data.book)}>
+          <Button variant="warning" onClick={handleShowEdit}>
             Edit
           </Button>
-          <Button variant="danger" onClick={() => handleShowDelete(data.book)}>
+          <Button variant="danger" onClick={handleShowDelete}>
             Delete
           </Button>
         </div>
